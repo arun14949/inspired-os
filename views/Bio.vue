@@ -3,9 +3,10 @@
     <img class="w-full h-auto" src="@/assets/Biography/self.jpg" />
     <h2 class="font-bold text-2xl py-5">Don Chia (谢祺恩)</h2>
     <h4 class="text-gray-600 font-medium text-xs" style="padding-bottom: 10px">
-        Software Engineer @ MINDEF Signals Cloud and Digital Office • NOSSAFLEX • Fundigo Co. • Current Inc. •  Apple WWDC 2021 & 2022 SSC Scholar
+        CTO @ Randamu Anime •  Apple WWDC 2021 & 2022 SSC Scholar
     </h4>
     <h4 class="text-gray-600 font-medium text-xs">Singapore 📍</h4>
+
     <div class="flex flex-wrap mt-5 gap-2 items-center">
         <img class="w-auto h-5 rounded-none text-xs" alt="Swift" src="https://img.shields.io/badge/-Swift-orange" />
         <img class="w-auto h-5 rounded-none text-xs" alt="Python" src="https://img.shields.io/badge/-Python-blue" />
@@ -14,13 +15,14 @@
         <img class="w-auto h-5 rounded-none text-xs" alt="Git" src="https://img.shields.io/badge/-Git-critical" />
         <img class="w-auto h-5 rounded-none text-xs" alt="HTML/CSS" src="https://img.shields.io/badge/-HTML%2FCSS-yellowgreen" />
         <img class="w-auto h-5 rounded-none text-xs" alt="SwiftUI" src="https://img.shields.io/badge/-SwiftUI-3e8bc3" />
-        <img class="w-auto h-5 rounded-none text-xs" alt="React Native" src="https://img.shields.io/badge/-React Native-blue" />
+        <img class="w-auto h-5 rounded-none text-xs" alt="React Native" src="https://img.shields.io/badge/-React%20Native-blue" />
         <img class="w-auto h-5 rounded-none text-xs" alt="Vue" src="https://img.shields.io/badge/-VueJS-61b083" />
         <img class="w-auto h-5 rounded-none text-xs" alt="Flask" src="https://img.shields.io/badge/-Flask-406893" />
         <img class="w-auto h-5 rounded-none text-xs" alt="MongoDB" src="https://img.shields.io/badge/-MongoDB-4ca158" />
         <img class="w-auto h-5 rounded-none text-xs" alt="SQLite" src="https://img.shields.io/badge/-SQLite-64a2c9" />
         <img class="w-auto h-5 rounded-none text-xs" alt="Figma" src="https://img.shields.io/badge/-Figma-8c5aee" />
     </div>
+
     <div class="pt-7">
         <h3 class="underline font-bold text-md pb-1">About Me</h3>
         <p class="font-thin text-sm pb-2.5">
@@ -39,53 +41,75 @@
             In my spare time, I indulge in scrolling through analog camera listings or admiring my collection, although shooting has taken a backseat due to my various work commitments.
         </p>
     </div>
-    <div class="pt-7">
-        <h3 class="underline font-bold text-md pb-1">Employment History</h3>
-    </div>
-    <div class="pt-7">
-        <h3 class="pb-1"><b>NOSSAFLEX (2020 - Present)</b></h3>
-        <h6 class="text-gray-600 font-medium text-xs">Co-Founder, iOS Engineer</h6>
-        <p class="font-thin text-sm pb-2.5">
-            Four years ago, NOSSAFLEX was conceived as a joint venture project between myself, Josh, our designer from Melbourne, and Diego, our lead developer from Virginia. It aims to digitalize the analog photographer's workflow with a series of tools in the form of an iOS application. The app has since undergone multiple redesigns and has been featured on Channel 8 (Singapore), Apple's Entrepreneur Camp website, and was also recently submitted by Apple South Asia team for consideration in the Apple Design Awards.
-        </p>
-    </div>
 
     <div class="pt-7">
-        <h3 class="pb-1"><b>MINDEF Signals Cloud & Digital Office (2023 - Present)</b></h3>
-        <h6 class="text-gray-600 font-medium text-sm">Core Team, Lead Engineer</h6>
-        <p class="font-thin text-sm pb-2.5">
-            At Signal's Cloud & Digital Office (CADO), I served as the team's Lead Engineer and Designer. My role involves leading the development of application and software by applying my expertise in React Native and Vue.JS. Building robust solutions, tailored to the evolving need of the military.
-        </p>
+        <h3 class="underline font-bold text-md pb-1">Work Experience</h3>
     </div>
 
-    <div class="pt-7">
-        <h3 class="pb-1"><b>Fundigo Co. (2022 - Present)</b></h3>
-        <h6 class="text-gray-600 font-medium text-xs">Core Team, Frontend Engineer & UI/UX Designer</h6>
-        <p class="font-thin text-sm pb-2.5">
-            Utilised Vue.js and Tailwind CSS to construct an e-commerce portal for merchants. Leveraged skills and experience in Figma to design a cross-platform application by applying Material 3 design. The application has since been deployed and is currently in use by merchants.
-        </p>
-    </div>
+    <section class="pt-6">
+        <h4 class="text-lg font-semibold">Randamu Anime</h4>
+        <p class="text-gray-600 text-xs">CTO • Jan 2025 – Present • Ho Chi Minh City, VN & Singapore, SG</p>
+        <ul class="list-disc pl-5 mt-2 space-y-1 text-sm font-thin">
+            <li>Organized and supervised the design and implementation of Randamu’s digital marketplace using React. Optimized architecture and user experience.</li>
+            <li>Collaborated with the Marketing and Events team to run the first creator event at Orchard with thousands of attendees and hundreds of vendors.</li>
+            <li>Attended an IP and Licensing Expo in Shanghai. Built APAC licensing network and signed a licensed creator for Randamu.</li>
+            <li>Backed by Enterprise SG and incubated under Ngee Ann Polytechnic’s AGILE program.</li>
+        </ul>
+    </section>
 
-    <div class="pt-7">
-        <h3 class="pb-1"><b>Current Inc. (2023 - 2024)</b></h3>
-        <h6 class="text-gray-600 font-medium text-xs">Core Team, iOS Engineer</h6>
-        <p class="font-thin text-sm pb-2.5">
-            Developed a mobile application for a startup based in California that provides a platform for users to look for EV chargers. The application was built using Apple's SwiftUI framework and was designed to be user-friendly and intuitive.
-        </p>
-    </div>
+    <section class="pt-6">
+        <h4 class="text-lg font-semibold">NOSSAFLEX</h4>
+        <p class="text-gray-600 text-xs">iOS Engineer • May 2020 – Aug 2025 • Melbourne, AU & Fredericksburg, USA</p>
+        <ul class="list-disc pl-5 mt-2 space-y-1 text-sm font-thin">
+            <li>Led iOS frontend development in a cross-border team across the US and Australia.</li>
+            <li>Partnered with the lead designer to ship a polished iOS experience aligned with Apple HIG.</li>
+            <li>Consulted Apple Design Evangelist and applied MVVM for clean architecture.</li>
+            <li>Stack included UIKit, SwiftUI, AVFoundation, Core Data, and Firebase.</li>
+        </ul>
+    </section>
 
-    <div class="pt-7">
+    <section class="pt-6">
+        <h4 class="text-lg font-semibold">SAF Signals Cloud & Digital Office</h4>
+        <p class="text-gray-600 text-xs">Software Engineer • Nov 2023 – Aug 2024 • Singapore, SG</p>
+        <ul class="list-disc pl-5 mt-2 space-y-1 text-sm font-thin">
+            <li>Co-founded the Digital Office in Signals Corps with regulars. Office formally launched in 2025 with command structure and MINDEF funding.</li>
+            <li>Built apps with React Native, Firebase, and Flask. Deployed tools to troopers overseas.</li>
+            <li>Recognized by Chief of Army, Chief Signals Officer, and formation leaders.</li>
+            <li>Worked with Kotlin Jetpack Compose, SwiftUI, Vue3, Pinia, and TailwindCSS.</li>
+        </ul>
+    </section>
+
+    <section class="pt-6">
+        <h4 class="text-lg font-semibold">Fundigo Co.</h4>
+        <p class="text-gray-600 text-xs">Project Manager & Fullstack Web Developer • Jun 2022 – Dec 2024 • Singapore, SG</p>
+        <ul class="list-disc pl-5 mt-2 space-y-1 text-sm font-thin">
+            <li>Led a small international SEA team to deliver quality code and reliable releases.</li>
+            <li>Revamped cross-platform UI using Material 3 to improve engagement and clarity.</li>
+            <li>Built merchant portal with Vite, Vue3, and Pinia. Applied MVVM patterns with TailwindCSS.</li>
+            <li>Funded by Quest Ventures and incubated under SUSS Accelerator.</li>
+        </ul>
+    </section>
+
+    <section class="pt-6">
+        <h4 class="text-lg font-semibold">Current Mobility</h4>
+        <p class="text-gray-600 text-xs">iOS Engineer • Oct 2023 – Mar 2024 • Palo Alto, USA</p>
+        <ul class="list-disc pl-5 mt-2 space-y-1 text-sm font-thin">
+            <li>Shipped an EV charging discovery app using SwiftUI and MapKit.</li>
+            <li>Worked with a senior tech lead to support funding milestones.</li>
+            <li>Stack included UIKit, SwiftUI, and Firebase.</li>
+        </ul>
+    </section>
+
+    <div class="pt-10">
         <h3 class="underline font-bold text-md pb-1">Projects & Achievements</h3>
     </div>
 
     <div class="pt-7">
-
-        <div class="">
+        <div>
             <h3 class="pb-1"><b>Apple Design Awards 2024</b></h3>
             <h6 class="text-gray-600 font-medium text-xs">Shortlisted Regionally</h6>
             <p class="font-thin text-sm pb-2.5">
                 Analog was shortlisted by Apple South Asia Developer Relations team and submitted to Apple Cupertino HQ for consideration in Apple’s annual Design Award. Apple’s South Asia DR team praised Analog for its adherence to Apple’s Human Interaction guidelines while adding a unique UI spin to the application’s design
-
             </p>
         </div>
 
