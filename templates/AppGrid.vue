@@ -1,9 +1,8 @@
 <script setup>
-import {useWindowsStore} from '@/stores/windows'
+import { useWindowsStore } from '@/stores/windows'
 import { onMounted } from 'vue';
 
 const windowsStore = useWindowsStore()
-
 const gridHeight = ref("")
 
 const openWindow = (windowId) => {
@@ -14,16 +13,11 @@ const openWindow = (windowId) => {
     windowsStore.setWindowState(payload)
 }
 
-const openGithub = () => {
-    window.open("https://github.com/DonChiaQE");
-}
-
-
 const getImagePath = (iconImage) => {
     const path = `../assets/win95Icons/${iconImage}`;
     const modules = import.meta.glob("../assets/win95Icons/*", { eager: true });
     const mod = modules[path]
-    return mod.default;
+    return mod ? mod.default : "";
 };
 
 onMounted(() => {
@@ -34,17 +28,17 @@ onMounted(() => {
 
 <template>
     <nav class="grid-container" :style="{ height: gridHeight }">
-    <li v-for="window in windowsStore.windows" :key="window.key">
+    <li v-for="win in windowsStore.windows" :key="win.windowId">
       <button
         class="icon"
-        v-if="window.showInAppGrid != false"
-        @touchstart="openWindow(window.windowId)"
-        @dblclick="openWindow(window.windowId)"
+        v-if="win.showInAppGrid != false"
+        @touchstart="openWindow(win.windowId)"
+        @dblclick="openWindow(win.windowId)"
       >
-      <img class="icon-image" :src=getImagePath(window.iconImage) :alt="window.altText" />
+      <img class="icon-image" :src="getImagePath(win.iconImage)" :alt="win.altText" />
         <div class="border-box">
           <p class="icon-text">
-            {{ window.displayName }}
+            {{ win.displayName }}
           </p>
         </div>
       </button>

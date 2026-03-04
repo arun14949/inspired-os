@@ -1,43 +1,32 @@
 <script setup>
-import FileWindow from './templates/FileWindow.vue'
 import Window from './templates/Window.vue'
-import Mail from './templates/Mail.vue'
+import ExplorerWindow from './templates/ExplorerWindow.vue'
+import TerminalWindow from './templates/TerminalWindow.vue'
+import IframeWindow from './templates/IframeWindow.vue'
 import Navbar from './templates/Navbar.vue'
 import AppGrid from './templates/AppGrid.vue'
-import Bio from './views/Bio.vue'
-import Resume from './views/Resume.vue'
-import Nossaflex from './views/Nossaflex.vue'
-import Wwdc2021 from './views/Wwdc2021.vue'
-import Wwdc2022 from './views/Wwdc2022.vue'
-import Wwdc2023 from './views/Wwdc2023.vue'
-import ImagePreviewWindow from './templates/ImagePreviewWindow.vue'
 import StartMenu from './templates/StartMenu.vue'
-import {
-    useWindowsStore
-} from './stores/windows'
+
+import About from './views/About.vue'
+import Resume from './views/Resume.vue'
+import Contact from './views/Contact.vue'
+import CaseStudy from './views/CaseStudy.vue'
+
+import { useWindowsStore } from './stores/windows'
+
 const windowsStore = useWindowsStore()
 const windows = windowsStore.windows
 
-const windowComponents = [
-  { name: 'window', comp: Window },
-  { name: 'ImagePreviewWindow', comp: ImagePreviewWindow },
-  { name: 'mail', comp: Mail },
-  { name: 'FilesWindow', comp: FileWindow }
-]
-
 const slotViews = [
-  { name: 'bio', comp: Bio },
+  { name: 'about', comp: About },
   { name: 'resume', comp: Resume },
-  { name: 'nossaflex', comp: Nossaflex },
-  { name: 'wwdc2021', comp: Wwdc2021 },
-  { name: 'wwdc2022', comp: Wwdc2022 },
-  { name: 'wwdc2023', comp: Wwdc2023 }
+  { name: 'contact', comp: Contact },
+  { name: 'casestudy', comp: CaseStudy },
 ]
 
 const windowCheck = (windowId) => {
-    if (windowsStore.getWindowById(windowId).windowState == "open") {
-        return true
-    } 
+    const w = windowsStore.getWindowById(windowId)
+    return w && w.windowState == "open"
 }
 
 const deinitWindows = () => {
@@ -48,11 +37,7 @@ const deinitWindows = () => {
 }
 
 const openWindow = (windowId) => {
-  const payload = {
-    windowState: "open",
-    windowId: windowId
-  }
-  windowsStore.setWindowState(payload)
+  windowsStore.setWindowState({ windowState: "open", windowId: windowId })
 }
 
 onMounted(() => {
@@ -66,47 +51,86 @@ onMounted(() => {
     let vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty("--vh", `${vh}px`);
   });
-  openWindow('BiographyWindow')
-})
 
+  openWindow('AboutApp')
+})
 </script>
 
 <template>
   <div id="app">
     <div class="screen" id="screen" @click="deinitWindows">
-      <div 
-        v-for="window in windows" 
-        :key="window.key" 
-        :aria-label="window.displayName"
+      <div
+        v-for="win in windows"
+        :key="win.windowId"
+        :aria-label="win.displayName"
       >
-          <component 
-            :is="windowComponents.find(comp => comp.name === window.windowComponent).comp"
-            :nameOfWindow="window.windowId" 
-            :content_padding_bottom="window.windowContentPadding['bottom']" 
-            :content_padding_left="window.windowContentPadding['left']" 
-            :content_padding_right="window.windowContentPadding['right']" 
-            :content_padding_top="window.windowContentPadding['top']" 
-            :id="window.windowId" 
-            :style="{
-                    position: window.position,
-                    left: window.positionX,
-                    top: window.positionY,
-                  }" 
-            :folderContent="window.folderContent" 
-            :folderSize="window.folderSize" 
-            v-if="windowCheck(window.windowId)" 
-          >
+        <!-- Standard Window (About, Resume, Contact, CaseStudy) -->
+        <Window
+          v-if="win.windowComponent === 'window' && windowCheck(win.windowId)"
+          :nameOfWindow="win.windowId"
+          :content_padding_bottom="win.windowContentPadding['bottom']"
+          :content_padding_left="win.windowContentPadding['left']"
+          :content_padding_right="win.windowContentPadding['right']"
+          :content_padding_top="win.windowContentPadding['top']"
+          :id="win.windowId"
+          :style="{
+            position: win.position,
+            left: win.positionX,
+            top: win.positionY,
+          }"
+        >
           <template v-slot:content>
-            <component :is="slotViews.find(comp => comp.name === window.windowContent).comp"></component>
+            <component
+              v-if="slotViews.find(sv => sv.name === win.windowContent)"
+              :is="slotViews.find(sv => sv.name === win.windowContent).comp"
+            />
           </template>
-          </component>
-        </div>
-        <AppGrid />
+        </Window>
+
+        <!-- Explorer Window (Projects, Games, Experiments) -->
+        <ExplorerWindow
+          v-if="win.windowComponent === 'ExplorerWindow' && windowCheck(win.windowId)"
+          :nameOfWindow="win.windowId"
+          :dataSource="win.explorerDataSource"
+          :id="win.windowId"
+          :style="{
+            position: win.position,
+            left: win.positionX,
+            top: win.positionY,
+          }"
+        />
+
+        <!-- Terminal Window -->
+        <TerminalWindow
+          v-if="win.windowComponent === 'TerminalWindow' && windowCheck(win.windowId)"
+          :nameOfWindow="win.windowId"
+          :id="win.windowId"
+          :style="{
+            position: win.position,
+            left: win.positionX,
+            top: win.positionY,
+          }"
+        />
+
+        <!-- Iframe Window (dynamically spawned for games/experiments) -->
+        <IframeWindow
+          v-if="win.windowComponent === 'IframeWindow' && windowCheck(win.windowId)"
+          :nameOfWindow="win.windowId"
+          :iframeUrl="win.iframeUrl"
+          :id="win.windowId"
+          :style="{
+            position: win.position,
+            left: win.positionX,
+            top: win.positionY,
+          }"
+        />
+      </div>
+      <AppGrid />
     </div>
     <StartMenu
       v-if="windowsStore.activeWindow == 'Menu'"
       style="position: absolute; z-index: 9999; left: 0; bottom: 36px"
-    ></StartMenu>
+    />
     <navbar style="position: absolute; bottom: 0; z-index: 9999" id="navbar" />
   </div>
 </template>
@@ -122,10 +146,6 @@ onMounted(() => {
   font-family: "MS Sans Serif";
   src: url("@/assets/fonts/MS-Sans-Serif.ttf");
 }
-
-/*-------------------------------------------*\
-    Utilities
-\*-------------------------------------------*/
 
 html {
   overflow: hidden;
@@ -162,7 +182,6 @@ h6 {
 }
 ::-webkit-scrollbar-thumb {
   background: rgb(189, 190, 189);
-  /* box-shadow: 1.5px 1.5px black; */
   border-top: solid rgb(250, 250, 250) 1.5px;
   border-left: solid rgb(250, 250, 250) 1.5px;
   border-bottom: solid rgb(90, 90, 90) 1.5px;
@@ -170,15 +189,23 @@ h6 {
   outline: rgb(219, 219, 219);
 }
 
-/*-------------------------------------------*\
-    Fullscreen
-\*-------------------------------------------*/
-
 .fullscreen {
   left: 0 !important;
   position: relative;
   display: block;
   top: 0 !important;
   right: 0 !important;
+}
+
+@media (max-width: 768px) {
+  .window-style {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: calc(100vh - 40px) !important;
+    min-width: 100vw !important;
+    transform: none !important;
+  }
 }
 </style>

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "entri-design-system",
+    "name": "Entri Design System",
+    "description": "A comprehensive design system for product consistency",
+    "icon": "file.png",
+    "type": "case-study",
+    "caseStudySlug": "entri-design-system",
+    "tags": ["design", "system"],
+    "year": 2024
+  },
+  {
+    "id": "super-quiz-dau",
+    "name": "Super Quiz DAU Growth",
+    "description": "Driving daily active user growth through gamification",
+    "icon": "file.png",
+    "type": "case-study",
+    "caseStudySlug": "super-quiz-dau",
+    "tags": ["product", "growth"],
+    "year": 2024
+  },
+  {
+    "id": "payment-flow",
+    "name": "Payment Flow Optimization",
+    "description": "Streamlining payment experience to reduce drop-offs",
+    "icon": "file.png",
+    "type": "case-study",
+    "caseStudySlug": "payment-flow",
+    "tags": ["product", "ux"],
+    "year": 2023
+  }
+]

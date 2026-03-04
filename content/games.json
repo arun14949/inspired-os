@@ -1,0 +1,18 @@
+[
+  {
+    "id": "whack-ajmal",
+    "name": "Whack Ajmal",
+    "description": "A chaotic whack-a-mole parody game",
+    "icon": "games.png",
+    "type": "iframe",
+    "url": "https://arun14949.github.io/whack-ajmal/"
+  },
+  {
+    "id": "imposter-monster",
+    "name": "Imposter Monster",
+    "description": "Find the imposter among the monsters",
+    "icon": "games.png",
+    "type": "iframe",
+    "url": "https://impostermonster.vercel.app"
+  }
+]

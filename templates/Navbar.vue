@@ -1,5 +1,5 @@
 <script setup>
-import moment from "moment";
+import dayjs from "dayjs";
 import {
     useWindowsStore
 } from '@/stores/windows'
@@ -33,10 +33,10 @@ const openWindow = (windowId) => {
 
 onBeforeMount(() => {
     setInterval(() => {
-        time.value = moment().format("hh:mm A");
+        time.value = dayjs().format("hh:mm A");
     }, 1000);
     setInterval(() => {
-        date.value = moment().format("ddd DD MMMM");
+        date.value = dayjs().format("ddd DD MMMM");
     }, 1000);
 })
 </script>

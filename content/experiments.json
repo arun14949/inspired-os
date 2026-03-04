@@ -1,0 +1,18 @@
+[
+  {
+    "id": "songs-that-feel-like-this",
+    "name": "Songs That Feel Like This",
+    "description": "An experimental music discovery experience",
+    "icon": "experiments.png",
+    "type": "iframe",
+    "url": "https://songs-that-feel-like-this.vercel.app"
+  },
+  {
+    "id": "house-of-westeros",
+    "name": "House of Westeros",
+    "description": "Interactive Game of Thrones house explorer",
+    "icon": "experiments.png",
+    "type": "iframe",
+    "url": "https://house-of-westeros.vercel.app"
+  }
+]
