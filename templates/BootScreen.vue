@@ -1,13 +1,15 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, nextTick, onMounted, onUnmounted } from 'vue'
 import { useSound } from '~/composables/useSound'
 
 const emit = defineEmits(['complete'])
 const { playSound } = useSound()
 
-const phase = ref('dos') // 'dos' | 'splash' | 'done'
+const bootScreen = ref(null)
+const phase = ref('dos') // 'dos' | 'waiting' | 'splash' | 'done'
 const visibleLines = ref(0)
 const progressWidth = ref(0)
+const dosComplete = ref(false)
 
 const dosLines = [
   'InspiredMonster BIOS v1.0',
@@ -24,13 +26,21 @@ const dosLines = [
 ]
 
 let dosTimer = null
-let splashTimer = null
 let progressTimer = null
 
-function skipToSplash() {
-  if (phase.value === 'dos') {
+function handleInteraction() {
+  if (phase.value === 'dos' && !dosComplete.value) {
+    // Skip remaining DOS lines and go to waiting
     clearInterval(dosTimer)
     visibleLines.value = dosLines.length
+    dosComplete.value = true
+    // Small delay so user sees "Starting InspiredMonster OS..."
+    setTimeout(() => { phase.value = 'waiting' }, 200)
+  } else if (phase.value === 'dos' && dosComplete.value) {
+    // DOS just finished, start splash
+    startSplash()
+  } else if (phase.value === 'waiting') {
+    // User clicked/pressed key after DOS completed — start splash with sound
     startSplash()
   }
 }
@@ -65,6 +75,11 @@ onMounted(() => {
     return
   }
 
+  // Focus the boot screen so keyboard events work
+  nextTick(() => {
+    if (bootScreen.value) bootScreen.value.focus()
+  })
+
   // Phase 1: DOS POST text
   let lineIndex = 0
   dosTimer = setInterval(() => {
@@ -72,20 +87,25 @@ onMounted(() => {
     visibleLines.value = lineIndex
     if (lineIndex >= dosLines.length) {
       clearInterval(dosTimer)
-      splashTimer = setTimeout(startSplash, 500)
+      dosComplete.value = true
+      // Wait briefly then show "Press any key" prompt
+      setTimeout(() => {
+        if (phase.value === 'dos') {
+          phase.value = 'waiting'
+        }
+      }, 500)
     }
   }, 200)
 })
 
 onUnmounted(() => {
   clearInterval(dosTimer)
-  clearTimeout(splashTimer)
   clearInterval(progressTimer)
 })
 </script>
 
 <template>
-  <div v-if="phase !== 'done'" class="boot-screen" @click="skipToSplash" @keydown="skipToSplash" tabindex="0">
+  <div v-if="phase !== 'done'" ref="bootScreen" class="boot-screen" @click="handleInteraction" @keydown.prevent="handleInteraction" tabindex="0">
     <!-- DOS POST Phase -->
     <div v-if="phase === 'dos'" class="dos-phase">
       <div class="dos-text">
@@ -94,6 +114,16 @@ onUnmounted(() => {
         </div>
       </div>
       <div class="skip-hint">Press any key or click to skip...</div>
+    </div>
+
+    <!-- Waiting for user interaction after DOS completes -->
+    <div v-if="phase === 'waiting'" class="dos-phase">
+      <div class="dos-text">
+        <div v-for="(line, i) in dosLines" :key="i" class="dos-line visible">
+          {{ line }}
+        </div>
+      </div>
+      <div class="skip-hint blink">Press any key to continue...</div>
     </div>
 
     <!-- Windows 95 Splash Phase -->
@@ -162,6 +192,15 @@ onUnmounted(() => {
   color: #555;
   font-size: 12px;
   text-align: center;
+}
+
+.skip-hint.blink {
+  color: #aaa;
+  animation: blink-text 1s step-end infinite;
+}
+
+@keyframes blink-text {
+  50% { opacity: 0; }
 }
 
 /* Splash Phase */
