@@ -41,16 +41,16 @@ const openWindow = (windowId) => {
 }
 
 onMounted(() => {
-  let navbar = document.getElementById("navbar");
-  let navbarHeight = navbar.clientHeight;
-
-  document.getElementById("screen").style.height =
-  window.innerHeight - navbarHeight + "px";
+  const navbar = document.getElementById("navbar")
+  const screen = document.getElementById("screen")
+  if (navbar && screen) {
+    screen.style.height = window.innerHeight - navbar.clientHeight + "px"
+  }
 
   window.addEventListener("resize", () => {
-    let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty("--vh", `${vh}px`);
-  });
+    const vh = window.innerHeight * 0.01
+    document.documentElement.style.setProperty("--vh", `${vh}px`)
+  })
 
   openWindow('AboutApp')
 })

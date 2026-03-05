@@ -3,7 +3,6 @@ import interact from 'interactjs';
 import {
     onMounted,
     ref,
-    defineProps,
     computed
 } from 'vue';
 import {
