@@ -167,7 +167,7 @@ onMounted(() => {
         <div class="file-explorer">
             <nav class="grid-container-files">
                 <li v-for="item in items" :key="item.id">
-                    <button class="icon-file" @click="playSound('click')" @dblclick="handleItemClick(item)" @touchstart="handleItemClick(item)">
+                    <button class="icon-file" @click="playSound('click')" @dblclick="playSound('dblclick'); handleItemClick(item)" @touchstart="handleItemClick(item)">
                         <img class="icon-image-file" :src="getImagePath(item.icon)" :alt="item.name" />
                         <div class="border-box">
                             <p class="icon-text">{{ item.name }}</p>

@@ -45,7 +45,6 @@ const openWindow = (windowId) => {
 
 const onBootComplete = () => {
   bootComplete.value = true
-  openWindow('AboutApp')
 }
 
 onMounted(() => {

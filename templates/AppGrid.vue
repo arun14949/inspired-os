@@ -36,7 +36,7 @@ onMounted(() => {
         v-if="win.showInAppGrid != false"
         @click="playSound('click')"
         @touchstart="openWindow(win.windowId)"
-        @dblclick="openWindow(win.windowId)"
+        @dblclick="playSound('dblclick'); openWindow(win.windowId)"
       >
       <img class="icon-image" :src="getImagePath(win.iconImage)" :alt="win.altText" />
         <div class="border-box">
