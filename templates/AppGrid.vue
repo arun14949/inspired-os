@@ -8,7 +8,7 @@ const { playSound } = useSound()
 const gridHeight = ref("")
 
 const openWindow = (windowId) => {
-    playSound('click')
+    playSound('dblclick')
     const payload = {
         windowState: "open",
         windowId: windowId
@@ -35,6 +35,7 @@ onMounted(() => {
       <button
         class="icon"
         v-if="win.showInAppGrid != false"
+        @click="playSound('click')"
         @touchstart="openWindow(win.windowId)"
         @dblclick="openWindow(win.windowId)"
       >

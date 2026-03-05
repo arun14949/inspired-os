@@ -4,13 +4,14 @@ let initialized = false
 
 const soundMap = {
   startup: '/sounds/startup.wav',
-  click: '/sounds/click.mp3',
-  open: '/sounds/click.mp3',
-  close: '/sounds/click.mp3',
-  minimize: '/sounds/click.mp3',
-  maximize: '/sounds/click.mp3',
-  error: '/sounds/click.mp3',
-  menu: '/sounds/click.mp3',
+  click: '/sounds/single_mouse_click.wav',
+  dblclick: '/sounds/double_mouse_click.wav',
+  open: '/sounds/single_mouse_click.wav',
+  close: '/sounds/single_mouse_click.wav',
+  minimize: '/sounds/single_mouse_click.wav',
+  maximize: '/sounds/single_mouse_click.wav',
+  error: '/sounds/single_mouse_click.wav',
+  menu: '/sounds/single_mouse_click.wav',
 }
 
 export function useSound() {
@@ -21,13 +22,13 @@ export function useSound() {
 
   function playSound(name) {
     if (muted) return
-    const src = soundMap[name] || '/sounds/click.mp3'
+    const src = soundMap[name] || '/sounds/single_mouse_click.wav'
     if (!audioCache[src]) {
       audioCache[src] = new Audio(src)
     }
     const audio = audioCache[src]
     audio.currentTime = 0
-    audio.play().catch(() => {})
+    audio.play().catch(() => { })
   }
 
   function toggleMute() {
