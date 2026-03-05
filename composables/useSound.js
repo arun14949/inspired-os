@@ -5,7 +5,6 @@ let initialized = false
 const soundMap = {
   startup: '/sounds/startup.wav',
   click: '/sounds/single_mouse_click.wav',
-  dblclick: '/sounds/double_mouse_click.wav',
   open: '/sounds/single_mouse_click.wav',
   close: '/sounds/single_mouse_click.wav',
   minimize: '/sounds/single_mouse_click.wav',

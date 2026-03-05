@@ -71,7 +71,6 @@ const closeWindow = () => {
 }
 
 const handleItemClick = (item) => {
-    playSound('dblclick')
     if (item.type === 'case-study') {
         windowsStore.openCaseStudy(item.caseStudySlug, item.name)
     } else if (item.type === 'iframe') {

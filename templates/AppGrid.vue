@@ -8,7 +8,6 @@ const { playSound } = useSound()
 const gridHeight = ref("")
 
 const openWindow = (windowId) => {
-    playSound('dblclick')
     const payload = {
         windowState: "open",
         windowId: windowId
