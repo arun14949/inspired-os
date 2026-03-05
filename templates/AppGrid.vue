@@ -1,11 +1,14 @@
 <script setup>
 import { useWindowsStore } from '@/stores/windows'
+import { useSound } from '~/composables/useSound'
 import { onMounted } from 'vue';
 
 const windowsStore = useWindowsStore()
+const { playSound } = useSound()
 const gridHeight = ref("")
 
 const openWindow = (windowId) => {
+    playSound('click')
     const payload = {
         windowState: "open",
         windowId: windowId

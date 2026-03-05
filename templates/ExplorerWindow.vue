@@ -3,6 +3,7 @@ import interact from 'interactjs';
 import { onMounted, ref, computed } from 'vue';
 import { useWindowsStore } from '@/stores/windows'
 import { useContentStore } from '@/stores/content'
+import { useSound } from '~/composables/useSound'
 
 const props = defineProps({
     windowId: String,
@@ -18,6 +19,7 @@ const position = ref({ x: 0, y: 0 })
 const tempPosition = ref({ x: 0, y: 0 })
 const windowsStore = useWindowsStore()
 const contentStore = useContentStore()
+const { playSound } = useSound()
 const windowRef = ref({})
 const ComponentName = props.nameOfWindow
 const w = ref(500)
@@ -45,6 +47,7 @@ const setActiveWindow = () => {
 }
 
 const toggleWindowSize = () => {
+    playSound('maximize')
     if (windowsStore.getWindowFullscreen(windowRef.value.windowId)) {
         windowsStore.setFullscreen({ fullscreen: false, windowId: windowRef.value.windowId })
         position.value.x = tempPosition.value.x
@@ -68,6 +71,7 @@ const closeWindow = () => {
 }
 
 const handleItemClick = (item) => {
+    playSound('click')
     if (item.type === 'case-study') {
         windowsStore.openCaseStudy(item.caseStudySlug, item.name)
     } else if (item.type === 'iframe') {

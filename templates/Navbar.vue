@@ -3,11 +3,14 @@ import dayjs from "dayjs";
 import {
     useWindowsStore
 } from '@/stores/windows'
+import { useSound } from '~/composables/useSound'
 
 const date = ref("")
 const time = ref("")
+const soundMuted = ref(false)
 
 const windowsStore = useWindowsStore()
+const { playSound, toggleMute, isMuted } = useSound()
 
 const getImagePath = (iconImage) => {
     const path = `../assets/win95Icons/${iconImage}`;
@@ -31,7 +34,17 @@ const openWindow = (windowId) => {
     windowsStore.setWindowState(payload)
 }
 
+const handleStartClick = () => {
+    playSound('menu')
+    windowsStore.setActiveWindow('Menu')
+}
+
+const handleMuteToggle = () => {
+    soundMuted.value = toggleMute()
+}
+
 onBeforeMount(() => {
+    soundMuted.value = isMuted()
     setInterval(() => {
         time.value = dayjs().format("hh:mm A");
     }, 1000);
@@ -43,7 +56,7 @@ onBeforeMount(() => {
 
 <template>
 <nav class="navbar-container">
-    <div alt="start" class="start-menu" v-on:click="windowsStore.setActiveWindow('Menu')" :class="
+    <div alt="start" class="start-menu" v-on:click="handleStartClick" :class="
           windowsStore.activeWindow == 'Menu'
             ? 'start-menu-depressed'
             : 'start-menu'
@@ -76,7 +89,13 @@ onBeforeMount(() => {
     </div>
     <div class="spacer"></div>
     <div alt="time" class="time">
-        <img src="../assets/speakers.png" class="icon-image" />
+        <img
+            src="../assets/speakers.png"
+            class="icon-image speaker-icon"
+            :class="{ 'speaker-muted': soundMuted }"
+            :title="soundMuted ? 'Sound: Off' : 'Sound: On'"
+            @click="handleMuteToggle"
+        />
         <time>
             {{ time }}
         </time>
@@ -232,6 +251,14 @@ onBeforeMount(() => {
     margin-right: 5px;
     margin-top: 0;
     margin-bottom: 0;
+}
+
+.speaker-icon {
+    cursor: pointer;
+}
+
+.speaker-muted {
+    opacity: 0.4;
 }
 
 .spacer {

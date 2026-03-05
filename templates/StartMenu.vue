@@ -1,9 +1,12 @@
 <script setup>
 import { useWindowsStore } from '@/stores/windows'
+import { useSound } from '~/composables/useSound'
 
 const windowsStore = useWindowsStore()
+const { playSound } = useSound()
 
 const openWindow = (windowId) => {
+    playSound('click')
     windowsStore.setActiveWindow("")
     windowsStore.setWindowState({ windowState: "open", windowId: windowId })
 }

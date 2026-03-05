@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { useSound } from "~/composables/useSound";
 
 export const useWindowsStore = defineStore("windows", {
   state: () => ({
@@ -239,6 +240,7 @@ export const useWindowsStore = defineStore("windows", {
     },
 
     setWindowState(payload) {
+      const { playSound } = useSound();
       const window = this.windows.find(
         (w) => w.windowId === payload.windowId
       );
@@ -252,6 +254,7 @@ export const useWindowsStore = defineStore("windows", {
       }
 
       if (payload.windowState == "open") {
+        playSound('open');
         window.windowState = payload.windowState;
         setTimeout(() => {
           this.zIndexIncrement(payload.windowId);
@@ -263,6 +266,7 @@ export const useWindowsStore = defineStore("windows", {
           this.pushActiveWindow(window);
         }
       } else if (payload.windowState == "close") {
+        playSound('close');
         setTimeout(() => {
           window.windowState = payload.windowState;
         }, 0);
@@ -273,6 +277,7 @@ export const useWindowsStore = defineStore("windows", {
           this.setActiveWindow("nil");
         }, 0);
       } else if (payload.windowState == "minimize") {
+        playSound('minimize');
         setTimeout(() => {
           window.windowState = payload.windowState;
         }, 0);

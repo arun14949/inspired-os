@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue'
 import Window from './templates/Window.vue'
 import ExplorerWindow from './templates/ExplorerWindow.vue'
 import TerminalWindow from './templates/TerminalWindow.vue'
@@ -6,6 +7,7 @@ import IframeWindow from './templates/IframeWindow.vue'
 import Navbar from './templates/Navbar.vue'
 import AppGrid from './templates/AppGrid.vue'
 import StartMenu from './templates/StartMenu.vue'
+import BootScreen from './templates/BootScreen.vue'
 
 import About from './views/About.vue'
 import Resume from './views/Resume.vue'
@@ -16,6 +18,7 @@ import { useWindowsStore } from './stores/windows'
 
 const windowsStore = useWindowsStore()
 const windows = windowsStore.windows
+const bootComplete = ref(false)
 
 const slotViews = [
   { name: 'about', comp: About },
@@ -40,6 +43,11 @@ const openWindow = (windowId) => {
   windowsStore.setWindowState({ windowState: "open", windowId: windowId })
 }
 
+const onBootComplete = () => {
+  bootComplete.value = true
+  openWindow('AboutApp')
+}
+
 onMounted(() => {
   const navbar = document.getElementById("navbar")
   const screen = document.getElementById("screen")
@@ -51,14 +59,13 @@ onMounted(() => {
     const vh = window.innerHeight * 0.01
     document.documentElement.style.setProperty("--vh", `${vh}px`)
   })
-
-  openWindow('AboutApp')
 })
 </script>
 
 <template>
   <div id="app">
-    <div class="screen" id="screen" @click="deinitWindows">
+    <BootScreen @complete="onBootComplete" />
+    <div class="screen" id="screen" @click="deinitWindows" v-show="bootComplete">
       <div
         v-for="win in windows"
         :key="win.windowId"
@@ -129,9 +136,10 @@ onMounted(() => {
     </div>
     <StartMenu
       v-if="windowsStore.activeWindow == 'Menu'"
+      v-show="bootComplete"
       style="position: absolute; z-index: 9999; left: 0; bottom: 36px"
     />
-    <navbar style="position: absolute; bottom: 0; z-index: 9999" id="navbar" />
+    <navbar v-show="bootComplete" style="position: absolute; bottom: 0; z-index: 9999" id="navbar" />
   </div>
 </template>
 

@@ -2,6 +2,7 @@
 import interact from 'interactjs';
 import { onMounted, ref, computed } from 'vue';
 import { useWindowsStore } from '@/stores/windows'
+import { useSound } from '~/composables/useSound'
 
 const props = defineProps({
     windowId: String,
@@ -12,6 +13,7 @@ const props = defineProps({
 const position = ref({ x: 0, y: 0 })
 const tempPosition = ref({ x: 0, y: 0 })
 const windowsStore = useWindowsStore()
+const { playSound } = useSound()
 const windowRef = ref({})
 const ComponentName = props.nameOfWindow
 const w = ref(700)
@@ -37,6 +39,7 @@ const setActiveWindow = () => {
 }
 
 const toggleWindowSize = () => {
+    playSound('maximize')
     if (windowsStore.getWindowFullscreen(windowRef.value.windowId)) {
         windowsStore.setFullscreen({ fullscreen: false, windowId: windowRef.value.windowId })
         position.value.x = tempPosition.value.x

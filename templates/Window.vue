@@ -8,6 +8,7 @@ import {
 import {
     useWindowsStore
 } from '@/stores/windows'
+import { useSound } from '~/composables/useSound'
 
 const props = defineProps({
     windowId: String,
@@ -43,6 +44,7 @@ const tempPosition = ref({
     y: 0
 })
 const windowsStore = useWindowsStore()
+const { playSound } = useSound()
 const window = ref({})
 const ComponentName = props.nameOfWindow
 const w = ref(400)
@@ -65,6 +67,7 @@ const setActiveWindow = () => {
 }
 
 const toggleWindowSize = () => {
+    playSound('maximize')
     if (windowsStore.getWindowFullscreen(window.value.windowId) == true) {
         const payload = {
             fullscreen: false,
