@@ -14,6 +14,7 @@ const adjustedX = ref(props.x)
 const adjustedY = ref(props.y)
 
 const onItemClick = (item) => {
+  if (item.disabled) return
   if (item.action) item.action()
   emit('close')
 }
@@ -38,7 +39,11 @@ onMounted(() => {
     :style="{ left: adjustedX + 'px', top: adjustedY + 'px' }"
   >
     <template v-for="(item, index) in items" :key="index">
-      <div class="context-item" @click="onItemClick(item)">
+      <div
+        class="context-item"
+        :class="{ 'context-item-disabled': item.disabled }"
+        @click="onItemClick(item)"
+      >
         {{ item.label }}
       </div>
       <div v-if="item.dividerAfter" class="context-divider"></div>
@@ -71,6 +76,16 @@ onMounted(() => {
 .context-item:hover {
   background: rgb(0, 0, 118);
   color: white;
+}
+
+.context-item-disabled {
+  color: rgb(128, 128, 128);
+  text-shadow: 1px 1px 0 rgb(255, 255, 255);
+}
+
+.context-item-disabled:hover {
+  background: inherit;
+  color: rgb(128, 128, 128);
 }
 
 .context-divider {

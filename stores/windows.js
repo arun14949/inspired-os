@@ -6,6 +6,8 @@ export const useWindowsStore = defineStore("windows", {
     activeWindow: "",
     activeWindows: [],
     selectedIconIds: [],
+    iconPositions: {},
+    iconsMoved: false,
     zIndex: 2,
     windows: [
       {
@@ -298,6 +300,18 @@ export const useWindowsStore = defineStore("windows", {
 
     clearSelection() {
       this.selectedIconIds = [];
+    },
+
+    setIconPosition(windowId, x, y) {
+      this.iconPositions[windowId] = { x, y };
+      this.iconsMoved = Object.values(this.iconPositions).some(
+        (p) => p.x !== 0 || p.y !== 0
+      );
+    },
+
+    resetIconPositions() {
+      this.iconPositions = {};
+      this.iconsMoved = false;
     },
 
     openCaseStudy(slug, displayName) {

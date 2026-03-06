@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import Window from './templates/Window.vue'
 import ExplorerWindow from './templates/ExplorerWindow.vue'
 import TerminalWindow from './templates/TerminalWindow.vue'
@@ -38,12 +38,13 @@ const { isSelecting, selectionBox, onMouseDown: onLassoMouseDown } = useDesktopS
 // Context menu
 const contextMenu = reactive({ visible: false, x: 0, y: 0 })
 
-const contextMenuItems = [
+const contextMenuItems = computed(() => [
   {
     label: 'Arrange Icons',
     dividerAfter: true,
+    disabled: !windowsStore.iconsMoved,
     action: () => {
-      windowsStore.windows.sort((a, b) => a.displayName.localeCompare(b.displayName))
+      windowsStore.resetIconPositions()
     },
   },
   {
@@ -54,7 +55,7 @@ const contextMenuItems = [
     label: 'View Source Code',
     action: () => window.open('https://github.com/arun14949/inspired-os', '_blank'),
   },
-]
+])
 
 const onContextMenu = (event) => {
   if (event.target.closest('.window-style') || event.target.closest('.navbar-container')) return
@@ -236,8 +237,28 @@ html {
   cursor: url('/cursors/arrow.png') 0 0, auto;
 }
 
+/* Pointer cursor for interactive elements */
+a, button, [role="button"], select, summary,
+input[type="submit"], input[type="button"], input[type="reset"],
+.context-item, .tray-icon, .icon-file, .start-menu, .bar {
+  cursor: url('/cursors/pointer.png') 6 0, pointer;
+}
+
+/* Text cursor for text inputs */
+input[type="text"], input[type="password"], input[type="email"],
+input[type="url"], input[type="search"], input[type="tel"],
+input[type="number"], textarea, [contenteditable="true"] {
+  cursor: url('/cursors/text.png') 8 11, text;
+}
+
+/* Wait/hourglass cursor during loading */
 .cursor-wait, .cursor-wait * {
   cursor: url('/cursors/hourglass.png') 7 0, wait !important;
+}
+
+/* Move cursor for icon dragging */
+.cursor-move {
+  cursor: url('/cursors/move.png') 8 8, move !important;
 }
 
 h6 {

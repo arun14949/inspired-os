@@ -10,6 +10,12 @@
   margin-top: 10px;
 }
 
+.grid-container > li {
+  position: relative;
+  will-change: transform;
+  touch-action: none;
+}
+
 /*-------------------------------------------*\
     Icons
 \*-------------------------------------------*/
