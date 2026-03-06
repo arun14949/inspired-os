@@ -8,6 +8,7 @@ import { useSound } from '~/composables/useSound'
 const date = ref("")
 const time = ref("")
 const soundMuted = ref(false)
+const crtEnabled = ref(false)
 
 const windowsStore = useWindowsStore()
 const { playSound, toggleMute, isMuted } = useSound()
@@ -43,8 +44,15 @@ const handleMuteToggle = () => {
     soundMuted.value = toggleMute()
 }
 
+const handleCrtToggle = () => {
+    crtEnabled.value = !crtEnabled.value
+    localStorage.setItem('win95-crt', String(crtEnabled.value))
+    document.documentElement.classList.toggle('crt', crtEnabled.value)
+}
+
 onBeforeMount(() => {
     soundMuted.value = isMuted()
+    crtEnabled.value = localStorage.getItem('win95-crt') === 'true'
     setInterval(() => {
         time.value = dayjs().format("hh:mm A");
     }, 1000);
@@ -89,6 +97,12 @@ onBeforeMount(() => {
     </div>
     <div class="spacer"></div>
     <div alt="time" class="time">
+        <span
+            class="crt-toggle"
+            :class="{ 'crt-active': crtEnabled }"
+            :title="crtEnabled ? 'CRT: On' : 'CRT: Off'"
+            @click="handleCrtToggle"
+        >CRT</span>
         <img
             src="../assets/speakers.png"
             class="icon-image speaker-icon"
@@ -259,6 +273,19 @@ onBeforeMount(() => {
 
 .speaker-muted {
     opacity: 0.4;
+}
+
+.crt-toggle {
+    font-size: 9px;
+    padding: 1px 3px;
+    cursor: pointer;
+    color: #000;
+    margin-right: 2px;
+}
+
+.crt-active {
+    color: #00a800;
+    font-weight: bold;
 }
 
 .spacer {

@@ -58,6 +58,10 @@ onMounted(() => {
     const vh = window.innerHeight * 0.01
     document.documentElement.style.setProperty("--vh", `${vh}px`)
   })
+
+  if (localStorage.getItem('win95-crt') === 'true') {
+    document.documentElement.classList.add('crt')
+  }
 })
 </script>
 
@@ -214,5 +218,58 @@ h6 {
     min-width: 100vw !important;
     transform: none !important;
   }
+}
+
+/* CRT scanlines overlay */
+html.crt #app::before {
+  content: "";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.25) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.06),
+    rgba(0, 255, 0, 0.02),
+    rgba(0, 0, 255, 0.06)
+  );
+  background-size: 100% 2px, 3px 100%;
+  z-index: 100000;
+  pointer-events: none;
+}
+
+/* CRT flicker overlay */
+html.crt #app::after {
+  content: "";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(18, 16, 16, 0.1);
+  opacity: 0;
+  z-index: 100000;
+  pointer-events: none;
+  animation: crt-flicker 0.15s infinite;
+}
+
+@keyframes crt-flicker {
+  0% { opacity: 0.27; }
+  10% { opacity: 0.24; }
+  20% { opacity: 0.18; }
+  30% { opacity: 0.66; }
+  40% { opacity: 0.27; }
+  50% { opacity: 0.96; }
+  60% { opacity: 0.20; }
+  70% { opacity: 0.53; }
+  80% { opacity: 0.71; }
+  90% { opacity: 0.70; }
+  100% { opacity: 0.24; }
 }
 </style>
