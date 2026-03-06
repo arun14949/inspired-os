@@ -2,8 +2,6 @@
 
 ## A tiny internal tool that rescued our designers from endless certificate-making
 
-![Certificate Generator Hero](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*FhHxj6ZumOOemlabeekisw.png)
-
 *Arun Sajeev*  
 4 min read · Dec 12, 2025
 
@@ -150,7 +148,7 @@ Everything exports as **print-ready PDFs**.
 
 What once took designers **hours now takes teams minutes**.
 
-### Walkthrough Video
+## Walkthrough Video
 
 Watch the quick walkthrough video here:  
 https://youtu.be/BwSigid3_1Q
