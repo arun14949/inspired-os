@@ -193,79 +193,45 @@ def generate_hourglass():
 
 
 def generate_pointer():
-    """Win95 pointing hand cursor for links/buttons."""
+    """Win95 pointing hand cursor for links/buttons.
+    Uses a bitmap string where B=black, W=white, .=transparent.
+    """
+    # Classic Win95 link_select hand cursor (index finger pointing up)
+    # 16 wide x 22 tall, placed at offset (0, 0) in 32x32 canvas
+    bitmap = [
+        "......BB........",  # 0  - fingertip
+        ".....BWWB.......",  # 1
+        ".....BWWB.......",  # 2
+        ".....BWWB.......",  # 3
+        ".....BWWB.......",  # 4
+        ".....BWWB.......",  # 5
+        ".....BWWBBB.....",  # 6
+        ".....BWWBWWBB...",  # 7
+        ".....BWWBWWBWWB.",  # 8
+        ".....BWWBWWBWWB.",  # 9
+        ".BB..BWWBWWBWWB.",  # 10
+        "BWWB.BWWWWWWWWB.",  # 11
+        "BWWWBBWWWWWWWWB.",  # 12
+        ".BWWWWWWWWWWWWB.",  # 13
+        "..BWWWWWWWWWWWB.",  # 14
+        "..BWWWWWWWWWWB..",  # 15
+        "...BWWWWWWWWWB..",  # 16
+        "...BWWWWWWWWB...",  # 17
+        "....BWWWWWWWB...",  # 18
+        "....BWWWWWWB....",  # 19
+        ".....BWWWWWB....",  # 20
+        ".....BBBBBBBB...",  # 21
+    ]
+
     img = Image.new("RGBA", (32, 32), TRANSPARENT)
     px = img.load()
 
-    # Classic Win95 hand pointer - finger pointing up
-    # Black outline, white fill
-
-    border = [
-        # Index finger (pointing up)
-        (7, 0), (8, 0),
-        (6, 1), (9, 1),
-        (6, 2), (9, 2),
-        (6, 3), (9, 3),
-        (6, 4), (9, 4),
-        (6, 5), (9, 5),
-        (6, 6), (9, 6),
-        (6, 7), (9, 7),
-        (6, 8), (9, 8), (10, 8), (11, 8),
-        (6, 9), (9, 9), (12, 9),
-        # Other fingers join
-        (6, 10), (9, 10), (10, 10), (12, 10), (13, 10),
-        (3, 11), (4, 11), (6, 11), (14, 11),
-        (2, 12), (5, 12), (6, 12), (14, 12),
-        (2, 13), (14, 13),
-        (2, 14), (14, 14),
-        (2, 15), (13, 15),
-        (3, 16), (13, 16),
-        (3, 17), (12, 17),
-        (4, 18), (12, 18),
-        (4, 19), (11, 19),
-        (5, 20), (11, 20),
-        (5, 21), (10, 21),
-        (6, 22), (10, 22),
-        (6, 23), (7, 23), (8, 23), (9, 23), (10, 23),
-    ]
-
-    fill_rows = [
-        (1, 7, 1, 8, 1),   # y=1, x=7..8
-        (2, 7, 1, 8, 1),
-        (3, 7, 1, 8, 1),
-        (4, 7, 1, 8, 1),
-        (5, 7, 1, 8, 1),
-        (6, 7, 1, 8, 1),
-        (7, 7, 1, 8, 1),
-        (8, 7, 1, 8, 1),  (8, 10, 1, 10, 1),
-        (9, 7, 1, 8, 1),  (9, 10, 1, 11, 1),
-        (10, 7, 1, 8, 1), (10, 11, 1, 12, 1),
-        (11, 4, 1, 5, 1), (11, 7, 1, 8, 1), (11, 10, 1, 13, 1),
-        (12, 3, 1, 4, 1), (12, 7, 1, 13, 1),
-        (13, 3, 1, 13, 1),
-        (14, 3, 1, 13, 1),
-        (15, 3, 1, 12, 1),
-        (16, 4, 1, 12, 1),
-        (17, 4, 1, 11, 1),
-        (18, 5, 1, 11, 1),
-        (19, 5, 1, 10, 1),
-        (20, 6, 1, 10, 1),
-        (21, 6, 1, 9, 1),
-        (22, 7, 1, 9, 1),
-    ]
-
-    for x, y in border:
-        if 0 <= x < 32 and 0 <= y < 32:
-            px[x, y] = BLACK
-
-    for entry in fill_rows:
-        y = entry[0]
-        for i in range(1, len(entry), 2):
-            x_start = entry[i]
-            x_end = entry[i+1]
-            for x in range(x_start, x_end + 1):
-                if 0 <= x < 32 and 0 <= y < 32:
-                    px[x, y] = WHITE
+    for y, row in enumerate(bitmap):
+        for x, ch in enumerate(row):
+            if ch == 'B':
+                px[x, y] = BLACK
+            elif ch == 'W':
+                px[x, y] = WHITE
 
     img.save(f"{OUTPUT_DIR}/pointer.png")
     print("  pointer.png generated")

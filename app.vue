@@ -49,7 +49,10 @@ const contextMenuItems = computed(() => [
   },
   {
     label: 'Refresh',
-    action: () => location.reload(),
+    action: () => {
+      document.documentElement.classList.add('cursor-wait')
+      location.reload()
+    },
   },
   {
     label: 'View Source Code',
@@ -232,26 +235,34 @@ onMounted(() => {
   src: url("@/assets/fonts/MS-Sans-Serif.ttf");
 }
 
-html {
-  overflow: hidden;
+/* Win95 Cursor System */
+html, * {
   cursor: url('/cursors/arrow.png') 0 0, auto;
 }
 
+html {
+  overflow: hidden;
+}
+
 /* Pointer cursor for interactive elements */
-a, button, [role="button"], select, summary,
+a, a *, button, button *,
+[role="button"], select, summary,
 input[type="submit"], input[type="button"], input[type="reset"],
-.context-item, .tray-icon, .icon-file, .start-menu, .bar {
-  cursor: url('/cursors/pointer.png') 6 0, pointer;
+.context-item, .tray-icon, .icon-file, .start-menu, .bar,
+.navbar-item, .navbar-item-depressed, .start-menu-depressed {
+  cursor: url('/cursors/pointer.png') 7 0, pointer !important;
 }
 
 /* Text cursor for text inputs */
 input[type="text"], input[type="password"], input[type="email"],
 input[type="url"], input[type="search"], input[type="tel"],
-input[type="number"], textarea, [contenteditable="true"] {
-  cursor: url('/cursors/text.png') 8 11, text;
+input[type="number"], textarea, [contenteditable="true"],
+.terminal-body, .terminal-body * {
+  cursor: url('/cursors/text.png') 8 11, text !important;
 }
 
 /* Wait/hourglass cursor during loading */
+html.cursor-wait, html.cursor-wait *,
 .cursor-wait, .cursor-wait * {
   cursor: url('/cursors/hourglass.png') 7 0, wait !important;
 }
