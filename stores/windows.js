@@ -5,6 +5,7 @@ export const useWindowsStore = defineStore("windows", {
   state: () => ({
     activeWindow: "",
     activeWindows: [],
+    selectedIconIds: [],
     zIndex: 2,
     windows: [
       {
@@ -285,6 +286,18 @@ export const useWindowsStore = defineStore("windows", {
           this.setActiveWindow("nil");
         }, 0);
       }
+    },
+
+    selectIcon(windowId) {
+      this.selectedIconIds = [windowId];
+    },
+
+    setSelection(ids) {
+      this.selectedIconIds = [...ids];
+    },
+
+    clearSelection() {
+      this.selectedIconIds = [];
     },
 
     openCaseStudy(slug, displayName) {
