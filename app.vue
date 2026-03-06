@@ -59,7 +59,7 @@ onMounted(() => {
     document.documentElement.style.setProperty("--vh", `${vh}px`)
   })
 
-  if (localStorage.getItem('win95-crt') === 'true') {
+  if (localStorage.getItem('win95-crt') !== 'false') {
     document.documentElement.classList.add('crt')
   }
 })
@@ -231,7 +231,7 @@ html.crt #app::before {
   bottom: 0;
   background: linear-gradient(
     rgba(18, 16, 16, 0) 50%,
-    rgba(0, 0, 0, 0.25) 50%
+    rgba(0, 0, 0, 0.15) 50%
   ), linear-gradient(
     90deg,
     rgba(255, 0, 0, 0.06),
@@ -260,16 +260,16 @@ html.crt #app::after {
 }
 
 @keyframes crt-flicker {
-  0% { opacity: 0.27; }
-  10% { opacity: 0.24; }
-  20% { opacity: 0.18; }
-  30% { opacity: 0.66; }
-  40% { opacity: 0.27; }
-  50% { opacity: 0.96; }
-  60% { opacity: 0.20; }
-  70% { opacity: 0.53; }
-  80% { opacity: 0.71; }
-  90% { opacity: 0.70; }
-  100% { opacity: 0.24; }
+  0% { opacity: 0.14; }
+  10% { opacity: 0.12; }
+  20% { opacity: 0.09; }
+  30% { opacity: 0.33; }
+  40% { opacity: 0.14; }
+  50% { opacity: 0.48; }
+  60% { opacity: 0.10; }
+  70% { opacity: 0.27; }
+  80% { opacity: 0.36; }
+  90% { opacity: 0.35; }
+  100% { opacity: 0.12; }
 }
 </style>

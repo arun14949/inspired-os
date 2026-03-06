@@ -50,9 +50,25 @@ const handleCrtToggle = () => {
     document.documentElement.classList.toggle('crt', crtEnabled.value)
 }
 
+const isFullscreen = ref(false)
+
+const handleFullscreenToggle = () => {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen()
+    } else {
+        document.exitFullscreen()
+    }
+}
+
+onMounted(() => {
+    document.addEventListener('fullscreenchange', () => {
+        isFullscreen.value = !!document.fullscreenElement
+    })
+})
+
 onBeforeMount(() => {
     soundMuted.value = isMuted()
-    crtEnabled.value = localStorage.getItem('win95-crt') === 'true'
+    crtEnabled.value = localStorage.getItem('win95-crt') !== 'false'
     setInterval(() => {
         time.value = dayjs().format("hh:mm A");
     }, 1000);
@@ -96,23 +112,54 @@ onBeforeMount(() => {
     </div>
     </div>
     <div class="spacer"></div>
-    <div alt="time" class="time">
-        <span
-            class="crt-toggle"
-            :class="{ 'crt-active': crtEnabled }"
-            :title="crtEnabled ? 'CRT: On' : 'CRT: Off'"
+    <div alt="time" class="tray">
+        <svg
+            class="tray-icon"
             @click="handleCrtToggle"
-        >CRT</span>
+            width="16" height="16" viewBox="0 0 16 16"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <title>{{ crtEnabled ? 'Disable CRT Effect' : 'Enable CRT Effect' }}</title>
+            <rect x="1" y="1" width="14" height="10" fill="#c0c0c0" stroke="#808080" stroke-width="1"/>
+            <rect x="2" y="2" width="12" height="8" :fill="crtEnabled ? '#00a800' : '#404040'"/>
+            <template v-if="crtEnabled">
+                <line x1="2" y1="4" x2="14" y2="4" stroke="rgba(0,0,0,0.3)" stroke-width="0.5"/>
+                <line x1="2" y1="6" x2="14" y2="6" stroke="rgba(0,0,0,0.3)" stroke-width="0.5"/>
+                <line x1="2" y1="8" x2="14" y2="8" stroke="rgba(0,0,0,0.3)" stroke-width="0.5"/>
+            </template>
+            <rect x="5" y="11" width="6" height="1" fill="#808080"/>
+            <rect x="4" y="12" width="8" height="1" fill="#808080"/>
+        </svg>
         <img
             src="../assets/speakers.png"
-            class="icon-image speaker-icon"
+            class="tray-icon speaker-icon"
             :class="{ 'speaker-muted': soundMuted }"
             :title="soundMuted ? 'Sound: Off' : 'Sound: On'"
             @click="handleMuteToggle"
         />
-        <time>
-            {{ time }}
-        </time>
+        <svg
+            class="tray-icon fullscreen-icon"
+            @click="handleFullscreenToggle"
+            width="16" height="16" viewBox="0 0 16 16"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <title>{{ isFullscreen ? 'Exit Fullscreen' : 'Fullscreen' }}</title>
+            <template v-if="!isFullscreen">
+                <!-- Single maximized window -->
+                <rect x="1" y="1" width="14" height="14" fill="#c0c0c0" stroke="#808080" stroke-width="1"/>
+                <rect x="2" y="2" width="12" height="3" fill="#000080"/>
+                <rect x="3" y="6" width="10" height="8" fill="#fff" stroke="#808080" stroke-width="0.5"/>
+            </template>
+            <template v-else>
+                <!-- Two cascaded/restored windows -->
+                <rect x="4" y="1" width="11" height="11" fill="#c0c0c0" stroke="#808080" stroke-width="1"/>
+                <rect x="5" y="2" width="9" height="2.5" fill="#000080"/>
+                <rect x="1" y="4" width="11" height="11" fill="#c0c0c0" stroke="#808080" stroke-width="1"/>
+                <rect x="2" y="5" width="9" height="2.5" fill="#000080"/>
+                <rect x="2" y="8" width="9" height="6" fill="#fff" stroke="#808080" stroke-width="0.5"/>
+            </template>
+        </svg>
+        <time>{{ time }}</time>
     </div>
 </nav>
 </template>
@@ -267,53 +314,50 @@ onBeforeMount(() => {
     margin-bottom: 0;
 }
 
-.speaker-icon {
+.tray-icon {
+    width: 16px;
+    height: 16px;
     cursor: pointer;
+    flex-shrink: 0;
+}
+
+.speaker-icon {
+    width: 16px;
+    height: 16px;
 }
 
 .speaker-muted {
     opacity: 0.4;
 }
 
-.crt-toggle {
-    font-size: 9px;
-    padding: 1px 3px;
-    cursor: pointer;
-    color: #000;
-    margin-right: 2px;
-}
-
-.crt-active {
-    color: #00a800;
-    font-weight: bold;
-}
-
 .spacer {
     flex-grow: 1;
 }
 
-.time {
-    width: 75px;
+.tray {
     margin: 5px;
     height: 25px;
+    padding: 0 6px;
     background: rgb(192, 192, 192);
     border-right: solid rgb(250, 250, 250) 1.5px;
     border-bottom: solid rgb(250, 250, 250) 1.5px;
     border-top: solid rgb(90, 90, 90) 1.5px;
     border-left: solid rgb(90, 90, 90) 1.5px;
     display: flex;
-    justify-content: center;
     align-items: center;
-    flex-direction: row;
+    gap: 5px;
     font-size: 0.6em;
+    white-space: nowrap;
 }
 
 @media only screen and (max-width: 700px) {
-    .time {
-        width: auto !important;
+    .tray {
         padding-left: 5px;
         padding-right: 5px;
-        text-wrap: nowrap;
+    }
+
+    .fullscreen-icon {
+        display: none;
     }
 
     .icon-image {
