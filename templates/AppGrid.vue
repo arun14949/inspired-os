@@ -23,6 +23,14 @@ const gridWindows = computed(() =>
 const selectIcon = (windowId, event) => {
     if (draggingIconId.value) return
     event.stopPropagation()
+
+    // Don't clear multi-selection when clicking an already-selected icon
+    // (user might be about to drag the group)
+    if (windowsStore.selectedIconIds.includes(windowId) && windowsStore.selectedIconIds.length > 1) {
+        playSound('click')
+        return
+    }
+
     playSound('click')
     windowsStore.selectIcon(windowId)
 }
