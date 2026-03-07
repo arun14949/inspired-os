@@ -31,8 +31,10 @@ const slotViews = [
 ]
 
 // Desktop drag-selection (lasso)
+let lastSelectionTime = 0
 const { isSelecting, selectionBox, onMouseDown: onLassoMouseDown } = useDesktopSelection((ids) => {
   windowsStore.setSelection(ids)
+  lastSelectionTime = Date.now()
 })
 
 // Context menu
@@ -78,6 +80,12 @@ const windowCheck = (windowId) => {
 }
 
 const deinitWindows = () => {
+  // Don't clear selection if currently dragging
+  if (windowsStore.draggingIconId) return
+
+  // Don't clear selection if it was just made (within 200ms buffer)
+  if (Date.now() - lastSelectionTime < 200) return
+
   windowsStore.clearSelection()
   closeContextMenu()
   if (windowsStore.activeWindow == "Menu") {

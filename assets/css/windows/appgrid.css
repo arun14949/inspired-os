@@ -33,6 +33,12 @@
   align-items: center;
   text-align: center;
   width: 60%;
+  cursor: url('/cursors/arrow.png') 0 0, auto !important;
+}
+
+/* Move cursor only during active drag */
+.icon.cursor-move {
+  cursor: url('/cursors/move.png') 8 8, move !important;
 }
 
 .icon-text {

@@ -11,7 +11,7 @@ const { playSound } = useSound()
 const { isMobile } = useDeviceDetection()
 const gridHeight = ref("")
 const visibleCount = ref(0)
-const draggingIconId = ref(null)
+const draggingIconId = computed(() => windowsStore.draggingIconId)
 const lastTapTime = ref(0)
 const lastTappedIcon = ref(null)
 const DOUBLE_TAP_DELAY = 300 // milliseconds
@@ -91,7 +91,7 @@ function setupDraggable() {
         interact(el).draggable({
             listeners: {
                 start() {
-                    draggingIconId.value = windowId
+                    windowsStore.setDraggingIcon(windowId)
                 },
                 move(event) {
                     const draggedIconId = windowId
@@ -109,7 +109,7 @@ function setupDraggable() {
                 },
                 end() {
                     setTimeout(() => {
-                        draggingIconId.value = null
+                        windowsStore.clearDraggingIcon()
                     }, 0)
                 }
             },
