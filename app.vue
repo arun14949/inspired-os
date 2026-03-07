@@ -96,6 +96,7 @@ const onBootComplete = () => {
 
 const onIconsLoaded = () => {
   iconsLoading.value = false
+  document.documentElement.classList.remove('cursor-wait')
 }
 
 onMounted(() => {
@@ -205,7 +206,7 @@ onMounted(() => {
           height: selectionBox.height + 'px',
         }"
       ></div>
-      <AppGrid @iconsLoaded="onIconsLoaded" />
+      <AppGrid v-if="bootComplete" @iconsLoaded="onIconsLoaded" />
     </div>
     <ContextMenu
       v-if="contextMenu.visible"
