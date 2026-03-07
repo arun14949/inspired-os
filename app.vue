@@ -253,13 +253,13 @@ html {
   overflow: hidden;
 }
 
-/* Pointer cursor for interactive elements */
+/* Pointer cursor for interactive elements - use arrow (Win95 authentic) */
 a, a *, button, button *,
 [role="button"], select, summary,
 input[type="submit"], input[type="button"], input[type="reset"],
 .context-item, .tray-icon, .icon-file, .start-menu, .bar,
 .navbar-item, .navbar-item-depressed, .start-menu-depressed {
-  cursor: url('/cursors/pointer.png') 7 0, pointer !important;
+  cursor: url('/cursors/arrow.png') 0 0, pointer !important;
 }
 
 /* Text cursor for text inputs */

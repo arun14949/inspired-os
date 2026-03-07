@@ -31,8 +31,10 @@
   flex-direction: column;
   margin: 1rem;
   align-items: center;
+  justify-content: center;
   text-align: center;
-  width: 60%;
+  width: 70px;
+  height: 70px;
   cursor: url('/cursors/arrow.png') 0 0, auto !important;
 }
 
@@ -45,9 +47,13 @@
   color: white;
   margin: 1px;
   font-size: smaller;
+  white-space: nowrap;
 }
 
 .border-box {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .icon-image {

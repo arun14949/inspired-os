@@ -119,7 +119,7 @@ function setupDraggable() {
                     endOnly: true
                 })
             ],
-        })
+        }).styleCursor(false)
     })
 }
 
