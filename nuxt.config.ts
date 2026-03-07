@@ -20,6 +20,9 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: 'InspiredMonster OS',
+      htmlAttrs: {
+        class: 'cursor-wait',
+      },
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -31,6 +34,12 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      ],
+      style: [
+        {
+          children: `html, * { cursor: url('/cursors/arrow.png') 0 0, auto; }
+html.cursor-wait, html.cursor-wait * { cursor: url('/cursors/hourglass.png') 7 0, wait !important; }`,
+        },
       ],
     },
   },

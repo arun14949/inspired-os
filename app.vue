@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import Window from './templates/Window.vue'
 import ExplorerWindow from './templates/ExplorerWindow.vue'
 import TerminalWindow from './templates/TerminalWindow.vue'
@@ -8,6 +8,7 @@ import Navbar from './templates/Navbar.vue'
 import AppGrid from './templates/AppGrid.vue'
 import StartMenu from './templates/StartMenu.vue'
 import BootScreen from './templates/BootScreen.vue'
+import ContextMenu from './templates/ContextMenu.vue'
 
 import About from './views/About.vue'
 import Resume from './views/Resume.vue'
@@ -15,10 +16,12 @@ import Contact from './views/Contact.vue'
 import CaseStudy from './views/CaseStudy.vue'
 
 import { useWindowsStore } from './stores/windows'
+import { useDesktopSelection } from './composables/useDesktopSelection'
 
 const windowsStore = useWindowsStore()
 const windows = windowsStore.windows
 const bootComplete = ref(false)
+const iconsLoading = ref(true)
 
 const slotViews = [
   { name: 'about', comp: About },
@@ -27,12 +30,64 @@ const slotViews = [
   { name: 'casestudy', comp: CaseStudy },
 ]
 
+// Desktop drag-selection (lasso)
+let lastSelectionTime = 0
+const { isSelecting, selectionBox, onMouseDown: onLassoMouseDown } = useDesktopSelection((ids) => {
+  windowsStore.setSelection(ids)
+  lastSelectionTime = Date.now()
+})
+
+// Context menu
+const contextMenu = reactive({ visible: false, x: 0, y: 0 })
+
+const contextMenuItems = computed(() => [
+  {
+    label: 'Arrange Icons',
+    dividerAfter: true,
+    disabled: !windowsStore.iconsMoved,
+    action: () => {
+      windowsStore.resetIconPositions()
+    },
+  },
+  {
+    label: 'Refresh',
+    action: () => {
+      document.documentElement.classList.add('cursor-wait')
+      location.reload()
+    },
+  },
+  {
+    label: 'View Source Code',
+    action: () => window.open('https://github.com/arun14949/inspired-os', '_blank'),
+  },
+])
+
+const onContextMenu = (event) => {
+  if (event.target.closest('.window-style') || event.target.closest('.navbar-container')) return
+  event.preventDefault()
+  contextMenu.visible = true
+  contextMenu.x = event.clientX
+  contextMenu.y = event.clientY
+}
+
+const closeContextMenu = () => {
+  contextMenu.visible = false
+}
+
 const windowCheck = (windowId) => {
     const w = windowsStore.getWindowById(windowId)
     return w && w.windowState == "open"
 }
 
 const deinitWindows = () => {
+  // Don't clear selection if currently dragging
+  if (windowsStore.draggingIconId) return
+
+  // Don't clear selection if it was just made (within 200ms buffer)
+  if (Date.now() - lastSelectionTime < 200) return
+
+  windowsStore.clearSelection()
+  closeContextMenu()
   if (windowsStore.activeWindow == "Menu") {
     windowsStore.setActiveWindow("")
     windowsStore.zIndexIncrement("")
@@ -45,6 +100,11 @@ const openWindow = (windowId) => {
 
 const onBootComplete = () => {
   bootComplete.value = true
+}
+
+const onIconsLoaded = () => {
+  iconsLoading.value = false
+  document.documentElement.classList.remove('cursor-wait')
 }
 
 onMounted(() => {
@@ -68,7 +128,15 @@ onMounted(() => {
 <template>
   <div id="app">
     <BootScreen @complete="onBootComplete" />
-    <div class="screen" id="screen" @click="deinitWindows" v-show="bootComplete">
+    <div
+      class="screen"
+      :class="{ 'cursor-wait': iconsLoading }"
+      id="screen"
+      @click.self="deinitWindows"
+      @mousedown="onLassoMouseDown"
+      @contextmenu="onContextMenu"
+      v-show="bootComplete"
+    >
       <div
         v-for="win in windows"
         :key="win.windowId"
@@ -135,8 +203,26 @@ onMounted(() => {
           }"
         />
       </div>
-      <AppGrid />
+      <!-- Lasso selection box -->
+      <div
+        v-if="isSelecting"
+        class="lasso-box"
+        :style="{
+          left: selectionBox.x + 'px',
+          top: selectionBox.y + 'px',
+          width: selectionBox.width + 'px',
+          height: selectionBox.height + 'px',
+        }"
+      ></div>
+      <AppGrid v-if="bootComplete" @iconsLoaded="onIconsLoaded" />
     </div>
+    <ContextMenu
+      v-if="contextMenu.visible"
+      :x="contextMenu.x"
+      :y="contextMenu.y"
+      :items="contextMenuItems"
+      @close="closeContextMenu"
+    />
     <StartMenu
       v-if="windowsStore.activeWindow == 'Menu'"
       v-show="bootComplete"
@@ -158,8 +244,41 @@ onMounted(() => {
   src: url("@/assets/fonts/MS-Sans-Serif.ttf");
 }
 
+/* Win95 Cursor System */
+html, * {
+  cursor: url('/cursors/arrow.png') 0 0, auto;
+}
+
 html {
   overflow: hidden;
+}
+
+/* Pointer cursor for interactive elements - use arrow (Win95 authentic) */
+a, a *, button, button *,
+[role="button"], select, summary,
+input[type="submit"], input[type="button"], input[type="reset"],
+.context-item, .tray-icon, .icon-file, .start-menu, .bar,
+.navbar-item, .navbar-item-depressed, .start-menu-depressed {
+  cursor: url('/cursors/arrow.png') 0 0, pointer !important;
+}
+
+/* Text cursor for text inputs */
+input[type="text"], input[type="password"], input[type="email"],
+input[type="url"], input[type="search"], input[type="tel"],
+input[type="number"], textarea, [contenteditable="true"],
+.terminal-body, .terminal-body * {
+  cursor: url('/cursors/text.png') 8 11, text !important;
+}
+
+/* Wait/hourglass cursor during loading */
+html.cursor-wait, html.cursor-wait *,
+.cursor-wait, .cursor-wait * {
+  cursor: url('/cursors/hourglass.png') 7 0, wait !important;
+}
+
+/* Move cursor for icon dragging */
+.cursor-move {
+  cursor: url('/cursors/move.png') 8 8, move !important;
 }
 
 h6 {
@@ -181,6 +300,13 @@ h6 {
   width: 100%;
   position: relative;
   z-index: 999;
+}
+
+.lasso-box {
+  position: absolute;
+  border: 1px dotted #000;
+  pointer-events: none;
+  z-index: 998;
 }
 
 ::-webkit-scrollbar {

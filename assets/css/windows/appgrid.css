@@ -10,6 +10,17 @@
   margin-top: 10px;
 }
 
+.grid-container > li {
+  position: relative;
+  will-change: transform;
+}
+
+@media only screen and (min-width: 769px) {
+  .grid-container > li {
+    touch-action: none; /* Only disable touch on desktop for dragging */
+  }
+}
+
 /*-------------------------------------------*\
     Icons
 \*-------------------------------------------*/
@@ -20,17 +31,29 @@
   flex-direction: column;
   margin: 1rem;
   align-items: center;
+  justify-content: center;
   text-align: center;
-  width: 60%;
+  width: 70px;
+  height: 70px;
+  cursor: url('/cursors/arrow.png') 0 0, auto !important;
+}
+
+/* Move cursor only during active drag */
+.icon.cursor-move {
+  cursor: url('/cursors/move.png') 8 8, move !important;
 }
 
 .icon-text {
   color: white;
   margin: 1px;
   font-size: smaller;
+  white-space: nowrap;
 }
 
 .border-box {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .icon-image {
@@ -39,18 +62,21 @@
   margin-bottom: 5px;
 }
 
-.icon:focus .icon-image {
+.icon:focus .icon-image,
+.icon-selected .icon-image {
   filter: grayscale(100%) brightness(30%) sepia(100%) hue-rotate(-180deg)
     saturate(400%) contrast(0.9);
 }
 
-.icon:focus .icon-text {
+.icon:focus .icon-text,
+.icon-selected .icon-text {
   background: rgb(0, 0, 118);
   color: white;
   margin: 0px;
 }
 
-.icon:focus .border-box {
+.icon:focus .border-box,
+.icon-selected .border-box {
   border: rgb(255, 255, 148) dotted 1px;
 }
 

@@ -4,6 +4,7 @@ import { onMounted, ref, computed } from 'vue';
 import { useWindowsStore } from '@/stores/windows'
 import { useContentStore } from '@/stores/content'
 import { useSound } from '~/composables/useSound'
+import { useDeviceDetection } from '~/composables/useDeviceDetection'
 
 const props = defineProps({
     windowId: String,
@@ -20,10 +21,14 @@ const tempPosition = ref({ x: 0, y: 0 })
 const windowsStore = useWindowsStore()
 const contentStore = useContentStore()
 const { playSound } = useSound()
+const { isMobile } = useDeviceDetection()
 const windowRef = ref({})
 const ComponentName = props.nameOfWindow
 const w = ref(500)
 const h = ref(400)
+const lastTapTime = ref(0)
+const lastTappedItem = ref(null)
+const DOUBLE_TAP_DELAY = 300
 
 const items = computed(() => contentStore.getItemsByType(props.dataSource))
 
@@ -77,6 +82,26 @@ const handleItemClick = (item) => {
         windowsStore.openIframeWindow(item.url, item.name, item.icon)
     } else if (item.type === 'link') {
         window.open(item.url, '_blank')
+    }
+}
+
+const handleItemTouch = (item, event) => {
+    if (!isMobile.value) return
+
+    event.preventDefault()
+
+    const now = Date.now()
+    const timeSinceLastTap = now - lastTapTime.value
+
+    if (timeSinceLastTap < DOUBLE_TAP_DELAY && lastTappedItem.value?.id === item.id) {
+        playSound('dblclick')
+        handleItemClick(item)
+        lastTapTime.value = 0
+        lastTappedItem.value = null
+    } else {
+        playSound('click')
+        lastTapTime.value = now
+        lastTappedItem.value = item
     }
 }
 
@@ -167,7 +192,7 @@ onMounted(() => {
         <div class="file-explorer">
             <nav class="grid-container-files">
                 <li v-for="item in items" :key="item.id">
-                    <button class="icon-file" @click="playSound('click')" @dblclick="playSound('dblclick'); handleItemClick(item)" @touchstart="handleItemClick(item)">
+                    <button class="icon-file" @click="!isMobile && playSound('click')" @touchstart="isMobile && handleItemTouch(item, $event)" @dblclick="!isMobile && (playSound('dblclick'), handleItemClick(item))">
                         <img class="icon-image-file" :src="getImagePath(item.icon)" :alt="item.name" />
                         <div class="border-box">
                             <p class="icon-text">{{ item.name }}</p>

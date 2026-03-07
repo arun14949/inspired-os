@@ -2,10 +2,24 @@ import { defineStore } from "pinia";
 import { useSound } from "~/composables/useSound";
 
 export const useWindowsStore = defineStore("windows", {
-  state: () => ({
-    activeWindow: "",
-    activeWindows: [],
-    zIndex: 2,
+  state: () => {
+    // Load icon positions from localStorage
+    const savedPositions = typeof window !== 'undefined'
+      ? localStorage.getItem('win95-icon-positions')
+      : null
+    const iconPositions = savedPositions ? JSON.parse(savedPositions) : {}
+    const iconsMoved = Object.values(iconPositions).some(
+      (p) => p.x !== 0 || p.y !== 0
+    )
+
+    return {
+      activeWindow: "",
+      activeWindows: [],
+      selectedIconIds: [],
+      iconPositions,
+      iconsMoved,
+      draggingIconId: null,
+      zIndex: 2,
     windows: [
       {
         windowId: "AboutApp",
@@ -180,7 +194,8 @@ export const useWindowsStore = defineStore("windows", {
         caseStudySlug: null,
       },
     ],
-  }),
+    }
+  },
 
   getters: {
     getFullscreenWindowHeight() {
@@ -285,6 +300,64 @@ export const useWindowsStore = defineStore("windows", {
           this.setActiveWindow("nil");
         }, 0);
       }
+    },
+
+    selectIcon(windowId) {
+      this.selectedIconIds = [windowId];
+    },
+
+    setSelection(ids) {
+      this.selectedIconIds = [...ids];
+    },
+
+    clearSelection() {
+      this.selectedIconIds = [];
+    },
+
+    setIconPosition(windowId, x, y) {
+      this.iconPositions[windowId] = { x, y };
+      this.iconsMoved = Object.values(this.iconPositions).some(
+        (p) => p.x !== 0 || p.y !== 0
+      );
+      // Save to localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('win95-icon-positions', JSON.stringify(this.iconPositions));
+      }
+    },
+
+    updateMultipleIconPositions(iconIds, dx, dy) {
+      iconIds.forEach(iconId => {
+        const currentPos = this.iconPositions[iconId] || { x: 0, y: 0 }
+        this.iconPositions[iconId] = {
+          x: currentPos.x + dx,
+          y: currentPos.y + dy
+        }
+      })
+
+      this.iconsMoved = Object.values(this.iconPositions).some(
+        (p) => p.x !== 0 || p.y !== 0
+      )
+      // Save to localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('win95-icon-positions', JSON.stringify(this.iconPositions));
+      }
+    },
+
+    resetIconPositions() {
+      this.iconPositions = {};
+      this.iconsMoved = false;
+      // Clear from localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('win95-icon-positions');
+      }
+    },
+
+    setDraggingIcon(windowId) {
+      this.draggingIconId = windowId;
+    },
+
+    clearDraggingIcon() {
+      this.draggingIconId = null;
     },
 
     openCaseStudy(slug, displayName) {
