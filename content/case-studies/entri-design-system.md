@@ -13,8 +13,8 @@ At a company our size, celebrations scale faster than humans can design certific
 
 And every celebration needs a certificate. A lot of certificates.
 
-> Before we go further, a quick clarification:  
-> This story is not about our course completion certificates. Those have IDs, validation pages, backend verification, and a whole ecosystem behind them.
+*Before we go further, a quick clarification:*  
+This story is not about our course completion certificates. Those have IDs, validation pages, backend verification, and a whole ecosystem behind them.
 
 This case study is about the event-based, feel-good certificates.  
 The “you did great!” ones. These were made manually by designers. Every single time.
@@ -31,17 +31,17 @@ Weekly events kept coming in → tons of certificate requests → designers cryi
 
 A few patterns quickly became obvious:
 
-- Designers needed **1–2 days** to deliver certificates because they also had real design work.
-- If there were only a few participants, they **manually typed names**, creating certificates one by one.
-- If there were many participants, designers used **variables and hoped the spacing didn’t break**.
-- Each designer had a slightly different design style → **branding consistency suffered**.
-- Academic teams occasionally asked for **custom-looking certificates**, creating even more variations.
+* Designers needed **1–2 days** to deliver certificates because they also had real design work.
+* If there were only a few participants, they **manually typed names**, creating certificates one by one.
+* If there were many participants, designers used **variables and hoped the spacing didn’t break**.
+* Each designer had a slightly different design style → **branding consistency suffered**.
+* Academic teams occasionally asked for **custom-looking certificates**, creating even more variations.
 
 Basically, we were spending **days every month polishing rectangles with names on them**. Not exactly the best use of design time.
 
 So the question became simple:
 
-> If other teams are providing the details, why can’t they create the certificates themselves?
+*If other teams are providing the details, why can’t they create the certificates themselves?*
 
 Something had to change. Preferably yesterday.
 
@@ -53,10 +53,10 @@ I had a chat with the Academic and HR teams expecting simple requests.
 
 Instead, I got a small shopping list:
 
-- “Can we add **multiple signatures**?”
-- “Sometimes we have **partner logos**.”
-- “We need **bulk generation… lots of bulk generation**.”
-- “Also can we **edit titles and descriptions ourselves**?”
+* Can we add **multiple signatures**?
+* Sometimes we have **partner logos**.
+* We need **bulk generation… lots of bulk generation**.
+* Also can we **edit titles and descriptions ourselves**?
 
 So the problem wasn’t making certificates.
 
@@ -70,7 +70,7 @@ And because certificates represent official communication, **access control and 
 
 I had unlimited credits in **Figma Make** until December 2025, so I wondered:
 
-> “Can I build a certificate-generating platform without writing a single line of code?”
+*Can I build a certificate-generating platform without writing a single line of code?*
 
 Turns out, I could.
 
@@ -78,11 +78,11 @@ What followed was equal parts **prototyping, prompting, and praying**.
 
 Why Figma Make worked beautifully:
 
-- It could **modify specific elements inside a selected frame**
-- It understood the **structure of my layout** because of Figma metadata
-- It allowed **rapid conversational iteration**
-- No **engineering dependency for early prototyping**
-- I could tweak layouts and logic **using prompts**
+* It could **modify specific elements inside a selected frame**
+* It understood the **structure of my layout** because of Figma metadata
+* It allowed **rapid conversational iteration**
+* No **engineering dependency for early prototyping**
+* I could tweak layouts and logic **using prompts**
 
 The first working draft appeared **within minutes**.
 
@@ -104,18 +104,18 @@ So I coordinated with our engineering team.
 
 **Engineering handled**
 
-- Google login authentication
+* Google login authentication
 
 **I handled**
 
-- The **access code system** for secure downloads
-- **Certificate generation logs** using Google Apps Script with ChatGPT’s help
+* The **access code system** for secure downloads
+* **Certificate generation logs** using Google Apps Script with ChatGPT’s help
 
 The goal was simple:
 
-- Keep access limited
-- Track activity
-- Prevent accidental misuse
+* Keep access limited
+* Track activity
+* Prevent accidental misuse
 
 This kept the process **lightweight while still respecting internal security requirements**.
 
@@ -127,18 +127,18 @@ This kept the process **lightweight while still respecting internal security req
 
 The final tool allows teams to create:
 
-- Participation certificates
-- Achievement certificates
-- Custom-title certificates
+* Participation certificates
+* Achievement certificates
+* Custom-title certificates
 
 Teams can customize:
 
-- Title
-- Content
-- Recipient name
-- Issue date
-- Partner logos
-- Multiple signatures
+* Title
+* Content
+* Recipient name
+* Issue date
+* Partner logos
+* Multiple signatures
 
 ![Certificate generator interface](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Cw8CBRY7Vbr_LG8L1-R8fQ.png)
 
@@ -148,12 +148,14 @@ Everything exports as **print-ready PDFs**.
 
 What once took designers **hours now takes teams minutes**.
 
+---
+
 ## Walkthrough Video
 
-Watch the quick walkthrough video here:  
+Watch the quick walkthrough video:  
 https://youtu.be/BwSigid3_1Q
 
-Priyanka created this walkthrough to help teams quickly learn how to use the tool.
+Priyanka created this walkthrough to help teams quickly understand how to use the tool.
 
 ---
 
@@ -183,5 +185,3 @@ It wasn’t just automation.
 It was **empowerment**.
 
 And sometimes, that’s enough to change how an entire company works.
-
----
