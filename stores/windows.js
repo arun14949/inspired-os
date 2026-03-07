@@ -309,6 +309,20 @@ export const useWindowsStore = defineStore("windows", {
       );
     },
 
+    updateMultipleIconPositions(iconIds, dx, dy) {
+      iconIds.forEach(iconId => {
+        const currentPos = this.iconPositions[iconId] || { x: 0, y: 0 }
+        this.iconPositions[iconId] = {
+          x: currentPos.x + dx,
+          y: currentPos.y + dy
+        }
+      })
+
+      this.iconsMoved = Object.values(this.iconPositions).some(
+        (p) => p.x !== 0 || p.y !== 0
+      )
+    },
+
     resetIconPositions() {
       this.iconPositions = {};
       this.iconsMoved = false;

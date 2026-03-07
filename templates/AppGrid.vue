@@ -85,8 +85,18 @@ function setupDraggable() {
                     draggingIconId.value = win.windowId
                 },
                 move(event) {
-                    const pos = windowsStore.iconPositions[win.windowId] || { x: 0, y: 0 }
-                    windowsStore.setIconPosition(win.windowId, pos.x + event.dx, pos.y + event.dy)
+                    const draggedIconId = win.windowId
+                    const selectedIds = windowsStore.selectedIconIds
+                    const isMultiSelect = selectedIds.length > 1 && selectedIds.includes(draggedIconId)
+
+                    if (isMultiSelect) {
+                        // Group drag: move all selected icons together
+                        windowsStore.updateMultipleIconPositions(selectedIds, event.dx, event.dy)
+                    } else {
+                        // Single drag: move only this icon
+                        const pos = windowsStore.iconPositions[draggedIconId] || { x: 0, y: 0 }
+                        windowsStore.setIconPosition(draggedIconId, pos.x + event.dx, pos.y + event.dy)
+                    }
                 },
                 end() {
                     setTimeout(() => {
