@@ -9,6 +9,7 @@ import {
 import {
     useWindowsStore
 } from '@/stores/windows'
+import { useDeviceDetection } from '~/composables/useDeviceDetection'
 
 const props = defineProps({
     windowId: String,
@@ -54,6 +55,7 @@ const tempPosition = ref({
     y: 0
 })
 const windowsStore = useWindowsStore()
+const { isMobile } = useDeviceDetection()
 const window = ref({})
 const ComponentName = props.nameOfWindow
 const w = ref(0)
@@ -62,6 +64,9 @@ const gridHeight = ref("")
 const fileExplorer = ref(null)
 const files = ref(props.folderContent)
 const size = ref(props.folderSize)
+const lastTapTime = ref(0)
+const lastTappedFile = ref(null)
+const DOUBLE_TAP_DELAY = 300
 
 onMounted(() => {
     let gridH = fileExplorer.value.clientHeight
@@ -210,6 +215,25 @@ const openWindow = (file) => {
     }
 }
 
+const handleFileTouch = (file, event) => {
+    if (!isMobile.value) return
+
+    event.preventDefault()
+
+    const now = Date.now()
+    const timeSinceLastTap = now - lastTapTime.value
+
+    if (timeSinceLastTap < DOUBLE_TAP_DELAY && lastTappedFile.value === file) {
+        openWindow(file)
+        lastTapTime.value = 0
+        lastTappedFile.value = null
+    } else {
+        setSize(file)
+        lastTapTime.value = now
+        lastTappedFile.value = file
+    }
+}
+
 let isDragging = false;
 
 onMounted(() => {
@@ -336,7 +360,7 @@ onMounted(() => {
         >
         <nav class="grid-container-photos" :style="{ height: gridHeight }">
             <li v-for="file in files" :key="file.key">
-                <button class="icon-photos" @click="setSize(file)" @touchstart="openWindow(file)" @dblclick="openWindow(file)">
+                <button class="icon-photos" @click="!isMobile && setSize(file)" @touchstart="isMobile && handleFileTouch(file, $event)" @dblclick="!isMobile && openWindow(file)">
                     <img v-if="file.type == 'photo'" class="icon-image-photos"  src="@/assets/FileWindow/image.png" :alt="file.altText" />
                     <img v-else-if="file.type == 'folder'" class="icon-image-photos" src="@/assets/FileWindow/folder.png" :alt="file.altText" />
                     <img v-else-if="file.type == 'file'" class="icon-image-photos" src="@/assets/FileWindow/file.png" :alt="file.altText" />

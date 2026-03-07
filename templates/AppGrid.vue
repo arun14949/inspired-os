@@ -2,14 +2,19 @@
 import interact from 'interactjs'
 import { useWindowsStore } from '@/stores/windows'
 import { useSound } from '~/composables/useSound'
+import { useDeviceDetection } from '~/composables/useDeviceDetection'
 import { onMounted, ref, computed } from 'vue';
 
 const emit = defineEmits(['iconsLoaded'])
 const windowsStore = useWindowsStore()
 const { playSound } = useSound()
+const { isMobile } = useDeviceDetection()
 const gridHeight = ref("")
 const visibleCount = ref(0)
 const draggingIconId = ref(null)
+const lastTapTime = ref(0)
+const lastTappedIcon = ref(null)
+const DOUBLE_TAP_DELAY = 300 // milliseconds
 
 const gridWindows = computed(() =>
     windowsStore.windows.filter(w => w.showInAppGrid !== false)
@@ -32,6 +37,28 @@ const openWindow = (windowId) => {
     })
 }
 
+const handleTouchStart = (windowId, event) => {
+    if (!isMobile.value) return
+    if (draggingIconId.value) return
+
+    event.preventDefault()
+
+    const now = Date.now()
+    const timeSinceLastTap = now - lastTapTime.value
+
+    if (timeSinceLastTap < DOUBLE_TAP_DELAY && lastTappedIcon.value === windowId) {
+        // Double-tap detected
+        openWindow(windowId)
+        lastTapTime.value = 0
+        lastTappedIcon.value = null
+    } else {
+        // Single tap - select icon
+        selectIcon(windowId, event)
+        lastTapTime.value = now
+        lastTappedIcon.value = windowId
+    }
+}
+
 const getImagePath = (iconImage) => {
     const path = `../assets/win95Icons/${iconImage}`;
     const modules = import.meta.glob("../assets/win95Icons/*", { eager: true });
@@ -46,6 +73,8 @@ const getIconTransform = (windowId) => {
 }
 
 function setupDraggable() {
+    if (isMobile.value) return
+
     gridWindows.value.forEach((win) => {
         const el = document.querySelector(`li[data-icon-id="${win.windowId}"]`)
         if (!el) return
@@ -110,9 +139,9 @@ onMounted(() => {
         }"
         :data-window-id="win.windowId"
         v-show="index < visibleCount"
-        @click="selectIcon(win.windowId, $event)"
-        @touchstart="openWindow(win.windowId)"
-        @dblclick="openWindow(win.windowId)"
+        @click="!isMobile && selectIcon(win.windowId, $event)"
+        @touchstart="isMobile && handleTouchStart(win.windowId, $event)"
+        @dblclick="!isMobile && openWindow(win.windowId)"
       >
       <img class="icon-image" :src="getImagePath(win.iconImage)" :alt="win.altText" />
         <div class="border-box">

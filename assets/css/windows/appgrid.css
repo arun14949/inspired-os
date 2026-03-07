@@ -13,7 +13,12 @@
 .grid-container > li {
   position: relative;
   will-change: transform;
-  touch-action: none;
+}
+
+@media only screen and (min-width: 769px) {
+  .grid-container > li {
+    touch-action: none; /* Only disable touch on desktop for dragging */
+  }
 }
 
 /*-------------------------------------------*\
