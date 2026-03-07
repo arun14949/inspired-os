@@ -84,16 +84,17 @@ function setupDraggable() {
     if (isMobile.value) return
 
     gridWindows.value.forEach((win) => {
-        const el = document.querySelector(`li[data-icon-id="${win.windowId}"]`)
+        const windowId = win.windowId  // Capture value to avoid closure bug
+        const el = document.querySelector(`li[data-icon-id="${windowId}"]`)
         if (!el) return
 
         interact(el).draggable({
             listeners: {
                 start() {
-                    draggingIconId.value = win.windowId
+                    draggingIconId.value = windowId
                 },
                 move(event) {
-                    const draggedIconId = win.windowId
+                    const draggedIconId = windowId
                     const selectedIds = windowsStore.selectedIconIds
                     const isMultiSelect = selectedIds.length > 1 && selectedIds.includes(draggedIconId)
 
